@@ -69,13 +69,13 @@ canvas {
 
 <script>
 
-// ====== КНОПКА (ТВОЙ ПРОКСИ) ======
+// ====== КНОПКА (НОВЫЙ ПРОКСИ) ======
 function connect() {
   const status = document.getElementById("status");
 
   status.innerText = "Подключаем...";
 
-  const tgLink = "tg://proxy?server=62.133.63.98&port=443&secret=e2264d200b7f7892d4bf3b295e3b52ef";
+  const tgLink = "tg://proxy?server=72.56.125.112&port=443&secret=ee9214ffb6c9054298359f964a324e0f1b676f6f676c652e636f6d";
 
   const a = document.createElement("a");
   a.href = tgLink;
@@ -84,7 +84,7 @@ function connect() {
   a.click();
 
   setTimeout(() => {
-    status.innerText = "Если не подключилось — проверь Telegram";
+    status.innerText = "Если не подключилось — открой Telegram вручную";
   }, 2000);
 }
 
