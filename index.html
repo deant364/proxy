@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Secure Telegram Access</title>
+<title>Telegram Access</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -16,35 +16,33 @@ body {
 }
 
 h1 {
-  margin-top:80px;
-  text-shadow:0 0 15px #00ff9f;
+  margin-top:60px;
+  text-shadow:0 0 10px #00ff9f;
 }
 
 button {
-  margin-top:40px;
-  padding:20px 40px;
-  font-size:20px;
+  margin-top:30px;
+  padding:18px 30px;
+  font-size:18px;
   border:1px solid #00ff9f;
   background:transparent;
   color:#00ff9f;
-  border-radius:12px;
+  border-radius:10px;
   cursor:pointer;
-  transition:0.2s;
 }
 
 button:hover {
   background:#00ff9f;
   color:black;
-  box-shadow:0 0 25px #00ff9f;
+  box-shadow:0 0 20px #00ff9f;
 }
 
 #status {
-  margin-top:25px;
+  margin-top:20px;
   font-size:14px;
-  opacity:0.8;
+  opacity:0.85;
 }
 
-/* MATRIX фон */
 canvas {
   position:fixed;
   top:0;
@@ -57,38 +55,6 @@ canvas {
   z-index:2;
 }
 </style>
-
-<script>
-const tgHttp = "https://t.me/proxy?server=72.56.125.112&port=443&secret=ee9214ffb6c9054298359f964a324e0f1b676f6f676c652e636f6d";
-
-function connect() {
-  const status = document.getElementById("status");
-
-  status.innerText = "Подключаем Telegram...";
-
-  // основной способ (самый стабильный)
-  window.location.href = tgHttp;
-
-  // fallback 1
-  setTimeout(() => {
-    window.open(tgHttp, "_blank");
-  }, 800);
-
-  // fallback 2 (если браузер тупит)
-  setTimeout(() => {
-    const a = document.createElement("a");
-    a.href = tgHttp;
-    document.body.appendChild(a);
-    a.click();
-  }, 1600);
-
-  // сообщение
-  setTimeout(() => {
-    status.innerText = "Если не открылось — попробуй ещё раз";
-  }, 3000);
-}
-</script>
-
 </head>
 
 <body>
@@ -97,16 +63,32 @@ function connect() {
 
 <div class="content">
   <h1>📡 CONNECT TELEGRAM</h1>
-
-  <button onclick="connect()">🚀 ПОДКЛЮЧИТЬ</button>
-
-  <div id="status">
-    Нажми кнопку для подключения
-  </div>
+  <button onclick="connect()">🚀 Подключить</button>
+  <div id="status">Готово</div>
 </div>
 
 <script>
-// MATRIX эффект
+
+// ====== КНОПКА (НОВЫЙ ПРОКСИ) ======
+function connect() {
+  const status = document.getElementById("status");
+
+  status.innerText = "Подключаем...";
+
+  const tgLink = "tg://proxy?server=72.56.125.112&port=443&secret=ee9214ffb6c9054298359f964a324e0f1b676f6f676c652e636f6d";
+
+  const a = document.createElement("a");
+  a.href = tgLink;
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.click();
+
+  setTimeout(() => {
+    status.innerText = "Если не подключилось — открой Telegram вручную";
+  }, 2000);
+}
+
+// ====== MATRIX ======
 const canvas = document.getElementById('matrix');
 const ctx = canvas.getContext('2d');
 
