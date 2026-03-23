@@ -2,73 +2,151 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Telegram Connect</title>
+<title>Secure Telegram Access</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<script>
-const tgLink = "tg://proxy?server=72.56.125.112&port=443&secret=ee9214ffb6c9054298359f964a324e0f1b676f6f676c652e636f6d";
-
-function connect() {
-  const status = document.getElementById("status");
-
-  status.innerText = "Открываем Telegram...";
-
-  // основной запуск
-  window.location.href = tgLink;
-
-  // fallback (если браузер тупит)
-  setTimeout(() => {
-    window.open(tgLink, "_blank");
-  }, 700);
-
-  // сообщение если не получилось
-  setTimeout(() => {
-    status.innerText = "Если не открылось — нажми кнопку ниже";
-  }, 2500);
-}
-
-// автостарт
-window.onload = () => {
-  setTimeout(connect, 500);
-};
-</script>
 
 <style>
 body {
+  margin:0;
   background:black;
   color:#00ff9f;
   font-family:monospace;
   text-align:center;
-  padding-top:80px;
+  overflow:hidden;
 }
 
 h1 {
-  text-shadow:0 0 10px #00ff9f;
+  margin-top:80px;
+  text-shadow:0 0 15px #00ff9f;
 }
 
 button {
-  margin-top:20px;
-  padding:15px 25px;
-  font-size:16px;
+  margin-top:40px;
+  padding:20px 40px;
+  font-size:20px;
   border:1px solid #00ff9f;
   background:transparent;
   color:#00ff9f;
-  border-radius:8px;
+  border-radius:12px;
+  cursor:pointer;
+  transition:0.2s;
 }
 
 button:hover {
   background:#00ff9f;
   color:black;
+  box-shadow:0 0 25px #00ff9f;
+}
+
+#status {
+  margin-top:25px;
+  font-size:14px;
+  opacity:0.8;
+}
+
+/* MATRIX фон */
+canvas {
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:0;
+}
+
+.content {
+  position:relative;
+  z-index:2;
 }
 </style>
+
+<script>
+const tgHttp = "https://t.me/proxy?server=72.56.125.112&port=443&secret=ee9214ffb6c9054298359f964a324e0f1b676f6f676c652e636f6d";
+
+function connect() {
+  const status = document.getElementById("status");
+
+  status.innerText = "Подключаем Telegram...";
+
+  // основной способ (самый стабильный)
+  window.location.href = tgHttp;
+
+  // fallback 1
+  setTimeout(() => {
+    window.open(tgHttp, "_blank");
+  }, 800);
+
+  // fallback 2 (если браузер тупит)
+  setTimeout(() => {
+    const a = document.createElement("a");
+    a.href = tgHttp;
+    document.body.appendChild(a);
+    a.click();
+  }, 1600);
+
+  // сообщение
+  setTimeout(() => {
+    status.innerText = "Если не открылось — попробуй ещё раз";
+  }, 3000);
+}
+</script>
+
 </head>
 
 <body>
 
-<h1>📡 CONNECT TELEGRAM</h1>
-<p id="status">Запуск...</p>
+<canvas id="matrix"></canvas>
 
-<button onclick="connect()">🚀 Подключить вручную</button>
+<div class="content">
+  <h1>📡 CONNECT TELEGRAM</h1>
+
+  <button onclick="connect()">🚀 ПОДКЛЮЧИТЬ</button>
+
+  <div id="status">
+    Нажми кнопку для подключения
+  </div>
+</div>
+
+<script>
+// MATRIX эффект
+const canvas = document.getElementById('matrix');
+const ctx = canvas.getContext('2d');
+
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+
+const letters = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&";
+const fontSize = 14;
+const columns = canvas.width / fontSize;
+
+const drops = [];
+
+for (let x = 0; x < columns; x++) drops[x] = 1;
+
+function draw() {
+  ctx.fillStyle = "rgba(0,0,0,0.05)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  ctx.fillStyle = "#00ff9f";
+  ctx.font = fontSize + "px monospace";
+
+  for (let i = 0; i < drops.length; i++) {
+    const text = letters[Math.floor(Math.random() * letters.length)];
+    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+      drops[i] = 0;
+    }
+
+    drops[i]++;
+  }
+}
+
+setInterval(draw, 33);
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
 
 </body>
 </html>
